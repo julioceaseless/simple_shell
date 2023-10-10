@@ -13,12 +13,18 @@ char *_getenv(const char *name)
 	char **env = environ;
 	int match;
 
+	if (name == NULL || env == NULL)
+	{
+		return (NULL);
+	}	
 	while (*env != NULL)
 	{
 		match = strncmp(*env, name, 5);
 		if (match == 0)
+		{
 			return (*env + 5);
-		*env++;
+		}
+		env++;
 	}
 	return (NULL);
 }
