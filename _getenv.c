@@ -11,7 +11,6 @@
 char *_getenv(const char *name)
 {
 	char **env = environ;
-	int i = 0;
 	int match;
 
 	while (*env != NULL)

@@ -36,7 +36,7 @@ void execute(char *args, char *argv)
 		}
 		if (child_pid == 0)
 		{
-			execve(run, cmd, environ);
+			execve(run, cmd, env);
 			perror(argv);
 			exit(1);
 		}
