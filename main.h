@@ -34,4 +34,5 @@ char **append_path(char *path, char *command);
 void print_env(void);
 void my_exit(void);
 void (*handle_built_in(char *key))(void);
+char *stringfy(char *argv[], int argc);
 #endif
