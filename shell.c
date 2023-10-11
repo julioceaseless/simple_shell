@@ -14,10 +14,12 @@ int main(int argc, char *argv[])
 	ssize_t read;
 	char *line = NULL;
 	void (*function)(void) = NULL;
+	char *str = NULL;
 
 	if (argc > 1)
 	{
-		execute(argv[1], argv[0]);
+		str = stringfy(argv, argc);
+		execute(str, argv[0]);
 	}
 	else
 	{
