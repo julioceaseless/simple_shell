@@ -1,6 +1,6 @@
 #include "main.h"
 /**
- * exit - exits shell
+ * my_exit - exits shell
  * Return: nothing!
  */
 void my_exit(void)
