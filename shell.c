@@ -13,8 +13,13 @@ int main(int argc, char *argv[])
 	size_t len = 0;
 	ssize_t read;
 	char *line = NULL;
+	void (*function)(void) = NULL;
 
-	if (argc == 1)
+	if (argc > 1)
+	{
+		execute(argv[1], argv[0]);
+	}
+	else
 	{
 		while (1)
 		{
@@ -27,13 +32,13 @@ int main(int argc, char *argv[])
 				line[read - 1] = '\0';
 				read--;
 			}
-			execute(line, argv[0]);
+			function = handle_built_in(line);
+			if (function != NULL)
+				function();
+			else
+				execute(line, argv[0]);
 		}
-		free(line);
 	}
-	else
-	{
-		execute(argv[1], argv[0]);
-	}
+	free(line);
 	return (0);
 }
