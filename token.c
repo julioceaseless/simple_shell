@@ -15,7 +15,7 @@ char **token(char *command, char *delimeter)
 
 	command_ = strdup(command);
 	/* get the first word */
-	token = strtok(command_, delimeter);
+	token = _strtok(command_, delimeter);
 	/* get the rest of the words */
 	while (token != NULL)
 	{
@@ -35,7 +35,7 @@ char **token(char *command, char *delimeter)
 		args[i] = buffer;
 		i++;
 
-		token = strtok(NULL, delimeter);
+		token = _strtok(NULL, delimeter);
 	}
 	args[i] = NULL;
 	free(command_);

@@ -13,12 +13,16 @@ int main(int argc, char *argv[])
 	ssize_t read;
 	char *line = NULL;
 	char *str = NULL;
-	void (*function)(void) = NULL;
+	void (*function)(char *) = NULL;
 
-	if (argc > 1)
+	if (!isatty(STDIN_FILENO))
 	{
-		str = stringfy(argv, argc);
-		execute(str, argv[0]);
+		if (argc > 1)
+		{
+			str = stringfy(argv, argc);
+			execute(str, argv[0]);
+			free(str);
+		}
 	}
 	else
 	{
@@ -35,7 +39,7 @@ int main(int argc, char *argv[])
 			}
 			function = handle_built_in(line);
 			if (function != NULL)
-				function();
+				function(line);
 			else
 				execute(line, argv[0]);
 		}
