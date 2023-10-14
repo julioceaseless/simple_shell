@@ -31,7 +31,7 @@ char *stringfy(char *argv[], int argc);
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 char *_strtok(char *str, const char *delim);
 /* Shell built in  */
-void (*handle_built_in(char *key))(char *);
+void (*handle_built_in(char *args))(char *);
 void print_env(char *args);
 void my_exit(char *args);
 void change_dir(char *args);
