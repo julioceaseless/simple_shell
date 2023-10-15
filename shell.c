@@ -3,26 +3,21 @@
  * main - Entry point
  * @argc: argument count
  * @argv: arguments
- *
  * Return: Always 0 Successg
- *
  */
 int main(int argc, char *argv[])
 {
 	size_t len = 0;
 	ssize_t read;
-	char *line = NULL;
-	char *str = NULL;
+	char *line = NULL, *str = NULL, *parsed_line_unp = NULL;
+	char **parsed_line = NULL;
 	void (*function)(char *) = NULL;
 
-	if (!isatty(STDIN_FILENO))
+	if (argc > 1)
 	{
-		if (argc > 1)
-		{
-			str = stringfy(argv, argc);
-			execute(str, argv[0]);
-			free(str);
-		}
+		str = remove_space_padding(stringfy(argv, argc));
+		execute(str, argv[0]);
+		free(str);
 	}
 	else
 	{
@@ -37,11 +32,18 @@ int main(int argc, char *argv[])
 				line[read - 1] = '\0';
 				read--;
 			}
-			function = handle_built_in(line);
-			if (function != NULL)
-				function(line);
-			else
-				execute(line, argv[0]);
+			parsed_line = token(line, ";");/* remove space paddings */
+			while (*parsed_line != NULL)
+			{
+				parsed_line_unp = remove_space_padding(*parsed_line);
+				function = handle_built_in(parsed_line_unp);
+				if (function != NULL)
+					function(parsed_line_unp);
+				else
+					execute(parsed_line_unp, argv[0]);
+			parsed_line++;
+			}
+			free(parsed_line_unp);
 		}
 	}
 	free(line);
