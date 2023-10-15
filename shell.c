@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
 {
 	size_t len = 0;
 	ssize_t read;
-	char *line = NULL, *str = NULL, *parsed_line_unp = NULL;
-	char **parsed_line = NULL;
+	char *line = NULL, *str = NULL, *stripped_cmd = NULL;
+	char **cmd_list = NULL;
 	void (*function)(char *) = NULL;
 
 	if (argc > 1)
@@ -32,18 +32,18 @@ int main(int argc, char *argv[])
 				line[read - 1] = '\0';
 				read--;
 			}
-			parsed_line = token(line, ";");/* remove space paddings */
-			while (*parsed_line != NULL)
+			cmd_list = token(line, ";");/* split commands */
+			while (*cmd_list != NULL)
 			{
-				parsed_line_unp = remove_space_padding(*parsed_line);
-				function = handle_built_in(parsed_line_unp);
+				stripped_cmd = remove_space_padding(*cmd_list);
+				function = handle_built_in(stripped_cmd);
 				if (function != NULL)
-					function(parsed_line_unp);
+					function(stripped_cmd);
 				else
-					execute(parsed_line_unp, argv[0]);
-			parsed_line++;
+					execute(stripped_cmd, argv[0]);
+			cmd_list++;
 			}
-			free(parsed_line_unp);
+			free(stripped_cmd);
 		}
 	}
 	free(line);
