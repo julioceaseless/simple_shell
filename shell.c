@@ -3,26 +3,21 @@
  * main - Entry point
  * @argc: argument count
  * @argv: arguments
- *
  * Return: Always 0 Successg
- *
  */
 int main(int argc, char *argv[])
 {
 	size_t len = 0;
 	ssize_t read;
-	char *line = NULL;
-	char *str = NULL;
+	char *line = NULL, *str = NULL, *stripped_cmd = NULL;
+	char **cmd_list = NULL;
 	void (*function)(char *) = NULL;
 
-	if (!isatty(STDIN_FILENO))
+	if (argc > 1)
 	{
-		if (argc > 1)
-		{
-			str = stringfy(argv, argc);
-			execute(str, argv[0]);
-			free(str);
-		}
+		str = remove_space_padding(stringfy(argv, argc));
+		execute(str, argv[0]);
+		free(str);
 	}
 	else
 	{
@@ -37,11 +32,18 @@ int main(int argc, char *argv[])
 				line[read - 1] = '\0';
 				read--;
 			}
-			function = handle_built_in(line);
-			if (function != NULL)
-				function(line);
-			else
-				execute(line, argv[0]);
+			cmd_list = token(line, ";");/* split commands */
+			while (*cmd_list != NULL)
+			{
+				stripped_cmd = remove_space_padding(*cmd_list);
+				function = handle_built_in(stripped_cmd);
+				if (function != NULL)
+					function(stripped_cmd);
+				else
+					execute(stripped_cmd, argv[0]);
+			cmd_list++;
+			}
+			free(stripped_cmd);
 		}
 	}
 	free(line);

@@ -20,6 +20,7 @@ struct built_in
 };
 typedef struct built_in built_t;
 extern char **environ;
+
 /* prototypes */
 void execute(char *args, char *argv);
 char **token(char *command, char *delimeter);
@@ -30,6 +31,8 @@ char **append_path(char *path, char *command);
 char *stringfy(char *argv[], int argc);
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 char *_strtok(char *str, const char *delim);
+char *remove_space_padding(char *word);
+
 /* Shell built in  */
 void (*handle_built_in(char *args))(char *);
 void print_env(char *args);
