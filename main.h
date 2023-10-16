@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <ctype.h>
 #define BUF_SIZE 120
 /**
  * struct built_in - function pointer struct
