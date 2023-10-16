@@ -13,7 +13,7 @@ char *remove_space_padding(char *word)
 	if (word == NULL)
 		return (NULL);
 	/* remove space at the start */
-	while (word[start] == ' ')
+	while (word[start] == ' ' || word[start] == '\t')
 		start++;
 
 	/* get length of word */
@@ -21,7 +21,7 @@ char *remove_space_padding(char *word)
 		;
 	/* remove space at the end */
 	end = len;
-	while (word[end - 1] == ' ')
+	while (word[end - 1] == ' ' || word[end - 1] == '\t')
 		end--;
 
 	/* copy string without space padding */
