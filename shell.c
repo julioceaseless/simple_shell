@@ -32,14 +32,12 @@ int main(int argc, char *argv[])
 				line[read - 1] = '\0';
 				read--;
 			}
-			cmd_list = token(line, ";");/* split commands */
+			cmd_list = token(line, ";");
 			while (*cmd_list != NULL)
 			{
 				stripped_cmd = remove_space_padding(*cmd_list);
 				function = handle_built_in(stripped_cmd);
-				if (function != NULL)
-					function(stripped_cmd);
-				else
+				(function != NULL) ? function(stripped_cmd) :
 					execute(stripped_cmd, argv[0]);
 			cmd_list++;
 			}
