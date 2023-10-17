@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	size_t len = 0;
 	ssize_t read;
 	char *line = NULL, *str = NULL;
-	void (*function)(char *)
+	void (*function)(char *) = NULL;
 
 	if (argc > 1)
 	{
