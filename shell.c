@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	{
 		while (1)
 		{
-			write(STDOUT_FILENO, "$ ", 2);
+			write(STDOUT_FILENO, "#cisfun$ ", 9);
 			read = _getline(&line, &len, stdin);
 			if (read <= 0)
 				exit(0);
