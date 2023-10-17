@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * my_exit - exits shell
  * @args: argument passed

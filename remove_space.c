@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * remove_space_padding - removes leading and trailing spaces
  * @word: pointer to the string that needs stripping

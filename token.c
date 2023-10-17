@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * token - splits a string of commands into entries
  * @command: string of command + arguments
