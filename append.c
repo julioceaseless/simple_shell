@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 #include <sys/stat.h>
 /**
  * append_path - adds path to command

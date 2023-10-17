@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * all_spaces - checks if a string contains only spaces
  * @str: string to be checked

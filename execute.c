@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * execute - function to exexcute command from env
  * @args: command passed with arguments

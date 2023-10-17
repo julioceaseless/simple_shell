@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * _getline - function that reads input from file descripter
  * @lineptr: pointer to line read
