@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
 	size_t len = 0;
 	ssize_t read;
 	char *line = NULL, *str = NULL;
+	void (*function)(char *)
 
 	if (argc > 1)
 	{
@@ -42,8 +43,7 @@ int main(int argc, char *argv[])
 			line[read - 1] = '\0';
 			read--;
 		}
-		void (*function)(char *) = handle_built_in(line);
-
+		function = handle_built_in(line);
 		if (function != NULL)
 			function(line);
 		else
