@@ -8,19 +8,17 @@
 void execute(char *args, char *argv)
 {
 	pid_t child_pid;
-	int status;
-	char *delim = " ";
-	char *path = _getenv("PATH=");
-	char **cmd = token(args, delim);
+	char *delim = " ", *run = NULL, **env = environ;
+	char *path = _getenv("PATH="), **cmd = token(args, delim);
 	char **fullpaths = append_path(path, *cmd);
-	char *run = NULL;
-	char **env = environ;
-	int check = check_path(args);
+	int status, check = check_path(args);
 
 	if (check == 0)
 		run = find_command(fullpaths);
-	else
+	else if (check == 1)
 		run = find_command(cmd);
+	else
+		return;
 	if (run == NULL)
 	{
 		perror(*cmd);
@@ -36,6 +34,8 @@ void execute(char *args, char *argv)
 		}
 		if (child_pid == 0)
 		{
+			if (cmd == NULL || env == NULL)
+				return;
 			execve(run, cmd, env);
 			perror(argv);
 			exit(1);

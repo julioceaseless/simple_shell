@@ -12,13 +12,13 @@ char **append_path(char *path, char *command)
 	char **full_paths = NULL;
 	int i, num_of_paths = 0;
 
-	if (path == NULL)
+	if (path == NULL || command == NULL)
 		return (NULL);
 	paths = token(path, ":");
 	if (paths == NULL)
 	{
 		perror("Token:");
-		exit(1);
+		return (NULL);
 	}
 	while (paths[num_of_paths] != NULL)
 		num_of_paths++;
@@ -26,7 +26,7 @@ char **append_path(char *path, char *command)
 	if (full_paths == NULL)
 	{
 		perror("malloc");
-		exit(1);
+		return (NULL);
 	}
 	for (i = 0; i < num_of_paths; i++)
 	{
@@ -35,7 +35,7 @@ char **append_path(char *path, char *command)
 		if (full_paths == NULL)
 		{
 			perror("malloc");
-			exit(1);
+			return (NULL);
 		}
 		strcpy(full_paths[i], paths[i]);
 		strcat(full_paths[i], "/");

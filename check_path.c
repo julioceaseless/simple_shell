@@ -8,6 +8,8 @@
 int check_path(const char *command)
 {
 	/* result = strchr(command, '/');*/
+	if (command == NULL)
+		return (-1);
 	if (*command == '/')
 		return (1);
 	return (0);

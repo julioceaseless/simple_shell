@@ -7,35 +7,42 @@
  */
 char **token(char *command, char *delimeter)
 {
-	char **args = NULL;
-	char *token = NULL;
-	char *buffer = NULL;
-	char *command_ = NULL;
+	char **args = NULL, *token = NULL, *buffer = NULL, *command_ = NULL;
 	int i = 0;
 
+	if (command == NULL || delimeter == NULL)
+		return (NULL);
 	command_ = strdup(command);
-	/* get the first word */
-	token = _strtok(command_, delimeter);
-	/* get the rest of the words */
+	if (command_ == NULL)
+		return (NULL);
+
+	token = strtok(command_, delimeter);
+	if (token == NULL)
+		return (NULL);
 	while (token != NULL)
 	{
 		buffer =  malloc(strlen(token) + 1);
 		if (buffer == NULL)
 		{
 			perror("malloc");
-			exit(1);
+			return (NULL);
 		}
 		strcpy(buffer, token);
 		args = realloc(args, (sizeof(char *)) * (i + 1));
 		if (args == NULL)
 		{
 			perror("realloc");
-			exit(1);
+			return (NULL);
 		}
 		args[i] = buffer;
 		i++;
-
-		token = _strtok(NULL, delimeter);
+		token = strtok(NULL, delimeter);
+	}
+	args = realloc(args, sizeof(char *) * (i + 1));
+	if (args == NULL)
+	{
+		perror("realloc");
+		return (NULL);
 	}
 	args[i] = NULL;
 	free(command_);

@@ -1,4 +1,17 @@
 #include "shell.h"
+#include <signal.h>
+/**
+ * signal_handle - checks for signal
+ * @signal: value of signal sent
+ */
+void signal_handle(int signal)
+{
+	if (signal == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n$ ", 3);
+	}
+}
+
 /**
  * main - Entry point
  * @argc: argument count
@@ -9,9 +22,7 @@ int main(int argc, char *argv[])
 {
 	size_t len = 0;
 	ssize_t read;
-	char *line = NULL, *str = NULL, *stripped_cmd = NULL;
-	char **cmd_list = NULL;
-	void (*function)(char *) = NULL;
+	char *line = NULL, *str = NULL;
 
 	if (argc > 1)
 	{
@@ -19,29 +30,25 @@ int main(int argc, char *argv[])
 		execute(str, argv[0]);
 		free(str);
 	}
-	else
+
+	signal(SIGINT, signal_handle);
+	while (1)
 	{
-		while (1)
+		write(STDOUT_FILENO, "$ ", 2);
+		read = _getline(&line, &len, stdin);
+
+		if (read > 0 && line[read - 1] == '\n')
 		{
-			write(STDOUT_FILENO, "$ ", 2);
-			read = _getline(&line, &len, stdin);
-			if (read <= 0)
-				exit(0);
-			if (read > 0 && line[read - 1] == '\n')
-			{
-				line[read - 1] = '\0';
-				read--;
-			}
-			cmd_list = token(line, ";");
-			while (*cmd_list != NULL)
-			{
-				stripped_cmd = remove_space_padding(*cmd_list);
-				function = handle_built_in(stripped_cmd);
-				(function != NULL) ? function(stripped_cmd) :
-					execute(stripped_cmd, argv[0]);
-			cmd_list++;
-			}
-			free(stripped_cmd);
+			line[read - 1] = '\0';
+			read--;
+		}
+		void (*function)(char *) = handle_built_in(line);
+
+		if (function != NULL)
+			function(line);
+		else
+		{
+			execute(line, argv[0]);
 		}
 	}
 	free(line);

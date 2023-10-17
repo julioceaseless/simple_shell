@@ -15,13 +15,24 @@ void (*handle_built_in(char *args))(char *)
 		{"cd", change_dir},
 		{NULL, NULL}
 	};
+
+	if (args == NULL)
+		return (NULL);
 	cmd = token(args, delim);
+	if (cmd == NULL)
+	{
+		perror("token");
+		return (NULL);
+	}
+
 	for (i = 0; blt_array[i].command != NULL; i++)
 	{
 		if (strcmp(*cmd, blt_array[i].command) == 0)
 		{
+			free(*cmd);
 			return (blt_array[i].func);
 		}
 	}
+	free(cmd);
 	return (NULL);
 }
