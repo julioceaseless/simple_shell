@@ -21,14 +21,14 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 	buf = malloc(BUF_SIZE);
 	if (buf == NULL)
 	{
-		perror("malloc");
+		free(buf);
 		return (-1);
 	}
 	while ((bytes_read = read(fd, buf, BUF_SIZE)))
 	{
 		if (bytes_read < 0)
 		{
-			perror("read");
+			free(buf);
 			return (-1);
 		}
 		total_bytes += bytes_read;

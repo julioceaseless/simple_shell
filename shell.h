@@ -36,6 +36,7 @@ char *remove_space_padding(char *word);
 int _setenv(const char *name, const char *value, int overwrite);
 void _setenv_call(char *args);
 int search_env(const char *key);
+void free_dbptr(char **ptr);
 
 /* Shell built in  */
 void (*handle_built_in(char *args))(char *);

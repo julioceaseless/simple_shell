@@ -15,7 +15,6 @@ char **token(char *command, char *delimeter)
 	command_ = strdup(command);
 	if (command_ == NULL)
 		return (NULL);
-
 	token = strtok(command_, delimeter);
 	if (token == NULL)
 		return (NULL);

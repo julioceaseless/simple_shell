@@ -18,4 +18,5 @@ void print_env(char *args)
 		printf("%s\n", *env);
 		env++;
 	}
+	free_dbptr(env);
 }

@@ -10,7 +10,7 @@ char **append_path(char *path, char *command)
 {
 	char **paths = NULL;
 	char **full_paths = NULL;
-	int i, num_of_paths = 0;
+	int i = 0, j = 0, num_of_paths = 0;
 
 	if (path == NULL || command == NULL)
 		return (NULL);
@@ -28,12 +28,14 @@ char **append_path(char *path, char *command)
 		perror("malloc");
 		return (NULL);
 	}
-	for (i = 0; i < num_of_paths; i++)
+	for (; i < num_of_paths; i++)
 	{
-		full_paths[i] = (char *)malloc(strlen(paths[i]) +
+		full_paths[i] = malloc(strlen(paths[i]) +
 				strlen(command) + 2);
-		if (full_paths == NULL)
+		if (full_paths[i] == NULL)
 		{
+			for (; j < i; j++)
+				free(full_paths[j]);
 			perror("malloc");
 			return (NULL);
 		}
@@ -41,6 +43,10 @@ char **append_path(char *path, char *command)
 		strcat(full_paths[i], "/");
 		strcat(full_paths[i], command);
 	}
+	for (i = 0; paths[i] != NULL; i++)
+		free(paths[i]);
+	free(paths);
 	full_paths[num_of_paths] = NULL;
 	return (full_paths);
 }
+

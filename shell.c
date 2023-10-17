@@ -19,13 +19,17 @@ void signal_handle(int signal)
  */
 int is_whitespace(const char *str)
 {
-	while (*str != '\0')
+	int i = 0;
+
+	if (str == NULL)
+		return (0);
+	while (str[i] != '\0')
 	{
-		if (!isspace((unsigned char)(*str)))
+		if (!isspace((unsigned char)str[i]))
 		{
 			return (0);
 		}
-		str++;
+		i++;
 	}
 	return (1);
 }
@@ -55,12 +59,14 @@ int main(int argc, char *argv[])
 		read = _getline(&line, &len, stdin);
 		if (read == -1)
 		{
+			free(line);
 			perror("_getline");
 			break;
 		}
 		if (read == 0)
 		{
 			write(STDOUT_FILENO, "\n", 1);
+			free(line);
 			break;
 		}
 		if (is_whitespace(line))
