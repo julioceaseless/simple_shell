@@ -10,7 +10,7 @@
 
 char *_getenv(const char *name)
 {
-	char **env = environ;
+	char **env = environ, *value;
 	int match;
 
 	if (name == NULL || env == NULL)
@@ -22,7 +22,13 @@ char *_getenv(const char *name)
 		match = strncmp(*env, name, strlen(name));
 		if (match == 0)
 		{
-			return (*env + strlen(name));
+			value = strdup(*env + strlen(name));
+			if (value == NULL)
+			{
+				perror("strdup");
+				return (NULL);
+			}
+			return (value);
 		}
 		env++;
 	}

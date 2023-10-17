@@ -8,7 +8,7 @@
 void execute(char *args, char *argv)
 {
 	pid_t child_pid;
-	char *delim = " ", *run = NULL, **env = environ;
+	char *delim = " \t\n", *run = NULL, **env = environ;
 	char *path = _getenv("PATH="), **cmd = token(args, delim);
 	char **fullpaths = append_path(path, *cmd);
 	int status, check = check_path(args);
@@ -17,11 +17,10 @@ void execute(char *args, char *argv)
 		run = find_command(fullpaths);
 	else if (check == 1)
 		run = find_command(cmd);
-	else
-		return;
+
 	if (run == NULL)
 	{
-		perror(*cmd);
+		fprintf(stderr, "%s 1: command not found\n", *cmd);
 		return;
 	}
 	else
@@ -45,4 +44,5 @@ void execute(char *args, char *argv)
 			waitpid(child_pid, &status, 0);
 		}
 	}
+	free(path);
 }

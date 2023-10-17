@@ -12,6 +12,9 @@ char *find_command(char **paths)
 	struct stat st;
 	int i = 0, found;
 
+	if (paths == NULL)
+		return (NULL);
+
 	if (paths != NULL)
 	{
 		while (paths[i] != NULL)
