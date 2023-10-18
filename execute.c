@@ -20,7 +20,7 @@ void execute(char *args, char *argv)
 
 	if (run == NULL)
 	{
-	        perror(*cmd);
+		perror(*cmd);
 		return;
 	}
 	else
@@ -35,22 +35,20 @@ void execute(char *args, char *argv)
 		{
 			if (cmd == NULL || env == NULL)
 				return;
-			if(execve(run, cmd, env) == -1)
-			  {
-			    free_dbptr(cmd);
-			    perror(argv);
-			    exit(1);
-			  }
+			if (execve(run, cmd, env) == -1)
+			{
+				free_dbptr(cmd);
+				perror(argv);
+				exit(1);
+			}
 			else
-			  {
-			    free_dbptr(cmd);
-			    exit(0);
-			  }
+			{
+				free_dbptr(cmd);
+				exit(0);
+			}
 		}
 		else
-		{
 			waitpid(child_pid, &status, 0);
-		}
 	}
 	free(path);
 }
