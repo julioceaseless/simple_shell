@@ -30,6 +30,7 @@ char **token(char *command, char *delimeter)
 		args = realloc(args, (sizeof(char *)) * (i + 1));
 		if (args == NULL)
 		{
+			free(buffer);
 			perror("realloc");
 			return (NULL);
 		}

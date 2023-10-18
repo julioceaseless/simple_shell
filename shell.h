@@ -27,7 +27,7 @@ void execute(char *args, char *argv);
 char **token(char *command, char *delimeter);
 char *find_command(char **paths);
 char *_getenv(const char *name);
-int check_path(const char *command);
+int check_path(char *command);
 char **append_path(char *path, char *command);
 char *stringfy(char *argv[], int argc);
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);

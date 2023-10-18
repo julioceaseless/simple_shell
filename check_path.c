@@ -5,12 +5,28 @@
  *
  * Return: 1 if path and 0 (no path)
  */
-int check_path(const char *command)
+int check_path(char *command)
 {
-	/* result = strchr(command, '/');*/
+	char *result = NULL;
+	char *delim = " \t\n";
+	char **cmd = NULL;
+
 	if (command == NULL)
 		return (-1);
-	if (*command == '/')
+
+	cmd = token(command, delim);
+	if (cmd == NULL)
+		return (-1);
+
+	result = strchr(*cmd, '/');
+
+	if (result != NULL)
+	{
+		free_dbptr(cmd);
 		return (1);
-	return (0);
+	}
+	else
+	{	free_dbptr(cmd);
+		return (0);
+	}
 }

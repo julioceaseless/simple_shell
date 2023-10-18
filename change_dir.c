@@ -28,8 +28,7 @@ int all_spaces(char *str)
  */
 void change_dir(char *args)
 {
-	char **cmd = NULL;
-	char *delim = " ", *curr = _getenv("PWD=");
+	char *delim = " ", **cmd = NULL,  *curr = _getenv("PWD=");
 	char *home = _getenv("HOME="),  *old = _getenv("OLDPWD=");
 	int ch_dir;
 
@@ -41,6 +40,7 @@ void change_dir(char *args)
 			ch_dir = chdir(old);
 			if (ch_dir != 0)
 			{
+				free_dbptr(cmd);
 				perror("chdir");
 				return;
 			}
@@ -53,6 +53,7 @@ void change_dir(char *args)
 			ch_dir = chdir(cmd[1]);
 			if (ch_dir != 0)
 			{
+				free_dbptr(cmd);
 				perror("cd");
 				return;
 			}
@@ -64,8 +65,10 @@ void change_dir(char *args)
 			chdir(home);
 		else
 		{
+			free_dbptr(cmd);
 			perror("chdir");
 			return;
 		}
 	}
+	free_dbptr(cmd);
 }
