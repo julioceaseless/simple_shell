@@ -39,7 +39,6 @@ void read_handler(ssize_t read, char *line, char *argv[])
 	}
 	if (read == 0)
 	{
-		write(STDOUT_FILENO, "\n", 1);
 		free(line);
 		exit(0);
 	}
@@ -105,7 +104,8 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		write(STDOUT_FILENO, "$ ", 2);
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "$ ", 2);
 		read = _getline(&line, &len, stdin);
 		read_handler(read, line, argv);
 	}
