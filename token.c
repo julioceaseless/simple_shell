@@ -7,51 +7,43 @@
  */
 char **token(char *command, char *delimiter)
 {
-  char **args, **tmp, *token = NULL;
-  int i = 0;
+    char **args = NULL;
+    char *token = NULL;
+    int i = 0;
 
     if (command == NULL || delimiter == NULL)
-      {
-        return (NULL);
-      }
-
+    {
+        return NULL;
+    }
     args = (char **)malloc(sizeof(char *));
     if (args == NULL)
-      {
+    {
         perror("malloc");
-        return (NULL);
-      }
+        return NULL;
+    }
 
     token = strtok(command, delimiter);
-
     while (token != NULL)
-      {
-	tmp = (char **)realloc(args, (i + 1) * sizeof(char *));
+    {
+        char **tmp = (char **)realloc(args, (i + 2) * sizeof(char *)); 
         if (tmp == NULL)
-	  {
+        {
             perror("realloc");
-            free(args); 
-            return (NULL);
-	  }
+            free_dbptr(args);
+            return NULL;
+        }
         args = tmp;
-	args[i] = (char *)malloc(strlen(token) + 1);
+        args[i] = malloc(strlen(token) + 1);
         if (args[i] == NULL)
-	  {
+        {
             perror("malloc");
-            return (NULL);
-	  }
+            free_dbptr(args); 
+            return NULL;
+        }
         strcpy(args[i], token);
+        args[i + 1] = NULL; 
         i++;
         token = strtok(NULL, delimiter);
-      }
-    tmp = (char **)realloc(args, (i + 1) * sizeof(char *));
-    if (tmp == NULL)
-      {
-        perror("realloc");
-        free(args); 
-        return (NULL);
-      }
-    args = tmp;
-    args[i] = NULL;
-    return (args);
+    }
+    return args;
 }
