@@ -1,27 +1,6 @@
 #include "shell.h"
 #include <signal.h>
 /**
- * is_whitespace - checks if a string consists of only whitespace characters
- * @str: string to check
- * Return: 1 if the string contains only whitespace, 0 otherwise
- */
-int is_whitespace(const char *str)
-{
-	int i = 0;
-
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		if (!isspace((unsigned char)str[i]))
-		{
-			return (0);
-		}
-		i++;
-	}
-	return (1);
-}
-/**
  * read_handler - handles read output
  * @read: value of read system call
  * @line: line read from stdin
@@ -29,23 +8,18 @@ int is_whitespace(const char *str)
  */
 void read_handler(ssize_t read, char *line, char *argv[])
 {
-	char **cmd = NULL;
+	char **cmd;
 	void (*function)(char *) = NULL;
 	int i = 0;
 
 	if (read == -1)
 	{
-		free(line);
 		perror("_getline");
 		exit(1);
 	}
-
 	if (read == 0)
-	{
-		free(line);
 		exit(0);
-	}
-	cmd = token(line, " \n");
+	cmd = token(line, "\n");
 	free(line);
 	if (cmd == NULL)
 		return;
@@ -56,9 +30,10 @@ void read_handler(ssize_t read, char *line, char *argv[])
 			execute(cmd[i], argv[0]);
 		else
 			function(cmd[i]);
+		free(cmd[i]);
 		i++;
 	}
-	free_dbptr(cmd);
+	free(cmd);
 }
 
 /**

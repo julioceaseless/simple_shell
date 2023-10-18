@@ -14,37 +14,33 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 	size_t total_bytes = 0;
 	int count = 1, fd = fileno(stream);
 
-	if (lineptr == NULL)
-		return (-1);
-	if (n == NULL)
+	if (lineptr == NULL || n == NULL)
 		return (-1);
 	buf = malloc(BUF_SIZE);
 	if (buf == NULL)
-	{
-		free(buf);
 		return (-1);
-	}
 	while ((bytes_read = read(fd, buf, BUF_SIZE)))
 	{
-		if (bytes_read < 0)
-		{
-			free(buf);
-			return (-1);
-		}
 		total_bytes += bytes_read;
 		if (buf[total_bytes - 1] == '\n')
 			break;
-		if (total_bytes > BUF_SIZE)
+		if (total_bytes >= BUF_SIZE)
 		{
 			count++;
 			buf = realloc(buf, (BUF_SIZE * count));
 			if (buf == NULL)
 			{
+				free(buf);
 				perror("realloc");
 				return (-1);
 			}
 		}
 	}
+	if (bytes_read == -1)
+	{
+		free(buf);
+		return (-1);
+        }
 	*lineptr = buf;
 	*n = 120 * count;
 	return (total_bytes);

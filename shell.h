@@ -37,7 +37,7 @@ int _setenv(const char *name, const char *value, int overwrite);
 void _setenv_call(char *args);
 int search_env(const char *key);
 void free_dbptr(char **ptr);
-
+int _strlen(char *str);
 /* Shell built in  */
 void (*handle_built_in(char *args))(char *);
 void print_env(char *args);

@@ -20,7 +20,7 @@ char **token(char *command, char *delimeter)
 		return (NULL);
 	while (token != NULL)
 	{
-		buffer =  malloc(strlen(token) + 1);
+		buffer =  malloc(_strlen(token) + 1);
 		if (buffer == NULL)
 		{
 			perror("malloc");
@@ -41,6 +41,8 @@ char **token(char *command, char *delimeter)
 	args = realloc(args, sizeof(char *) * (i + 1));
 	if (args == NULL)
 	{
+		free_dbptr(args);
+		free(buffer);
 		perror("realloc");
 		return (NULL);
 	}

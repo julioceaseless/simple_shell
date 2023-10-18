@@ -15,8 +15,8 @@ void print_env(char *args)
 		exit(9);
 	while (*env != NULL)
 	{
-		printf("%s\n", *env);
+		write(STDOUT_FILENO, *env, strlen(*env));
+		write(STDOUT_FILENO, "\n", 1);
 		env++;
 	}
-	free_dbptr(env);
 }
