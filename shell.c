@@ -29,38 +29,36 @@ int is_whitespace(const char *str)
  */
 void read_handler(ssize_t read, char *line, char *argv[])
 {
-  char **cmd = NULL;
-  void (*function)(char *) = NULL;
-  int i = 0;
+	char **cmd = NULL;
+	void (*function)(char *) = NULL;
+	int i = 0;
 
 	if (read == -1)
-	  {
-	    free(line);
-	    perror("_getline");
-	    exit(1);
-	  }
+	{
+		free(line);
+		perror("_getline");
+		exit(1);
+	}
+
 	if (read == 0)
 	{
-	  free(line);
-	  exit(0);
+		free(line);
+		exit(0);
 	}
 	cmd = token(line, " \n");
+	free(line);
 	if (cmd == NULL)
-	  return;
+		return;
 	while (cmd[i] != NULL)
-	  {
-	    function = handle_built_in(cmd[i]);
-	    if (function == NULL)
-	      {
-		execute(cmd[i], argv[0]);
-	      }
-	    else
-	      {
-		function(cmd[i]);
-	      }
-	    i++;
-	  }
-	free(cmd);
+	{
+		function = handle_built_in(cmd[i]);
+		if (function == NULL)
+			execute(cmd[i], argv[0]);
+		else
+			function(cmd[i]);
+		i++;
+	}
+	free_dbptr(cmd);
 }
 
 /**
