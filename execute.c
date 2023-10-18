@@ -20,7 +20,7 @@ void execute(char *args, char *argv)
 
 	if (run == NULL)
 	{
-		fprintf(stderr, "%s 1: command not found\n", *cmd);
+	        perror(*cmd);
 		return;
 	}
 	else
@@ -35,9 +35,17 @@ void execute(char *args, char *argv)
 		{
 			if (cmd == NULL || env == NULL)
 				return;
-			execve(run, cmd, env);
-			perror(argv);
-			exit(1);
+			if(execve(run, cmd, env) == -1)
+			  {
+			    free_dbptr(cmd);
+			    perror(argv);
+			    exit(1);
+			  }
+			else
+			  {
+			    free_dbptr(cmd);
+			    exit(0);
+			  }
 		}
 		else
 		{

@@ -6,9 +6,9 @@
  */
 void (*handle_built_in(char *args))(char *)
 {
-	int i;
-	char delim[] = " ";
-	char **cmd = NULL;
+	int i = 0;
+	char  *delim = " ";
+	char **cmd;
 	built_t blt_array[] = {
 		{"exit", my_exit},
 		{"env", print_env},
@@ -25,14 +25,14 @@ void (*handle_built_in(char *args))(char *)
 		return (NULL);
 	}
 
-	for (i = 0; blt_array[i].command != NULL; i++)
+	for (; blt_array[i].command != NULL; i++)
 	{
 		if (strcmp(*cmd, blt_array[i].command) == 0)
 		{
-			free(*cmd);
-			return (blt_array[i].func);
+		      free_dbptr(cmd);
+		      return (blt_array[i].func);
 		}
 	}
-	free(cmd);
+	free_dbptr(cmd);
 	return (NULL);
 }

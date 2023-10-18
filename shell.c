@@ -8,7 +8,8 @@
  */
 void read_handler(ssize_t read, char *line, char *argv[])
 {
-	char **cmd;
+        char *delim = "\n ";
+        char **cmd;
 	void (*function)(char *) = NULL;
 	int i = 0;
 
@@ -19,8 +20,7 @@ void read_handler(ssize_t read, char *line, char *argv[])
 	}
 	if (read == 0)
 		exit(0);
-	cmd = token(line, "\n");
-	free(line);
+	cmd = token(line, delim);
 	if (cmd == NULL)
 		return;
 	while (cmd[i] != NULL)
@@ -30,10 +30,9 @@ void read_handler(ssize_t read, char *line, char *argv[])
 			execute(cmd[i], argv[0]);
 		else
 			function(cmd[i]);
-		free(cmd[i]);
 		i++;
 	}
-	free(cmd);
+	free_dbptr(cmd);
 }
 
 /**
@@ -75,6 +74,7 @@ int main(int argc, char *argv[])
 			write(STDOUT_FILENO, "$ ", 2);
 		read = _getline(&line, &len, stdin);
 		read_handler(read, line, argv);
+		free(line);
 	}
 	return (0);
 }

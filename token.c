@@ -5,48 +5,53 @@
  * @delimeter: separater
  * Return: an array of strings
  */
-char **token(char *command, char *delimeter)
+char **token(char *command, char *delimiter)
 {
-	char **args = NULL, *token = NULL, *buffer = NULL, *command_ = NULL;
-	int i = 0;
+  char **args, **tmp, *token = NULL;
+  int i = 0;
 
-	if (command == NULL || delimeter == NULL)
-		return (NULL);
-	command_ = strdup(command);
-	if (command_ == NULL)
-		return (NULL);
-	token = strtok(command_, delimeter);
-	if (token == NULL)
-		return (NULL);
-	while (token != NULL)
-	{
-		buffer =  malloc(_strlen(token) + 1);
-		if (buffer == NULL)
-		{
-			perror("malloc");
-			return (NULL);
-		}
-		strcpy(buffer, token);
-		args = realloc(args, (sizeof(char *)) * (i + 1));
-		if (args == NULL)
-		{
-			free(buffer);
-			perror("realloc");
-			return (NULL);
-		}
-		args[i] = buffer;
-		i++;
-		token = strtok(NULL, delimeter);
-	}
-	args = realloc(args, sizeof(char *) * (i + 1));
-	if (args == NULL)
-	{
-		free_dbptr(args);
-		free(buffer);
-		perror("realloc");
-		return (NULL);
-	}
-	args[i] = NULL;
-	free(command_);
-	return (args);
+    if (command == NULL || delimiter == NULL)
+      {
+        return (NULL);
+      }
+
+    args = (char **)malloc(sizeof(char *));
+    if (args == NULL)
+      {
+        perror("malloc");
+        return (NULL);
+      }
+
+    token = strtok(command, delimiter);
+
+    while (token != NULL)
+      {
+	tmp = (char **)realloc(args, (i + 1) * sizeof(char *));
+        if (tmp == NULL)
+	  {
+            perror("realloc");
+            free(args); 
+            return (NULL);
+	  }
+        args = tmp;
+	args[i] = (char *)malloc(strlen(token) + 1);
+        if (args[i] == NULL)
+	  {
+            perror("malloc");
+            return (NULL);
+	  }
+        strcpy(args[i], token);
+        i++;
+        token = strtok(NULL, delimiter);
+      }
+    tmp = (char **)realloc(args, (i + 1) * sizeof(char *));
+    if (tmp == NULL)
+      {
+        perror("realloc");
+        free(args); 
+        return (NULL);
+      }
+    args = tmp;
+    args[i] = NULL;
+    return (args);
 }
