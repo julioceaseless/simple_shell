@@ -17,7 +17,7 @@
 extern char **environ;
 
 /**
- * struct  built_in - contain bultins to handle and function to excute
+ * struct built_in - contain bultins to handle and function to excute
  * @command:pointer to char
  * @func:fun to excute when bultin true
  */
@@ -33,19 +33,15 @@ void *_realloc(void *ptr, unsigned int prev_size, unsigned int curr_size);
 void _free(char **cmd_list, char *cmd);
 char *append_path(char *command, char *path);
 int check_cmd(char **cmd);
-char *_getenv(char *name);
 char **_token(char *cmd);
 int handle_built_in(char **cmd, int status);
 int execute(char **cmd, char *input, int errnum, char **argv);
 void my_exit(char **cmd, char *input, char *shell_name, int errnum);
-	
 int print_env(char **cmd, int errnum);
 int change_dir(char **cmd, int errnum);
 int bltn_lookup(char **cmd);
-
 void my_perror(char *input, int errnum, char *shell_name);
 void custm_perror(char *prog_name, int errnum, char **cmd);
-
 char *_itoa(unsigned int num);
 
 #endif
