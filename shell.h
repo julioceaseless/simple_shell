@@ -1,6 +1,6 @@
 #ifndef SHELL_H
 #define SHELL_H
-#define DELIM " \t\r\n\a"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
