@@ -1,46 +1,51 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef SHELL_H
+#define SHELL_H
+#define DELIM " \t\r\n\a"
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <signal.h>
 #include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <limits.h>
 #include <ctype.h>
-#define BUF_SIZE 120
-/**
- * struct built_in - function pointer struct
- * @command: pointer to command typed
- * @func: pointer to function
- */
-struct built_in
-{
-	char *command;
-	void (*func)(char *);
-};
-typedef struct built_in built_t;
+
 extern char **environ;
 
-/* prototypes */
-void execute(char *args, char *argv);
-char **token(char *command, char *delimeter);
-char *find_command(char **paths);
-char *_getenv(const char *name);
-int check_path(char *command);
-char **append_path(char *path, char *command);
-char *stringfy(char *argv[], int argc);
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
-char *_strtok(char *str, const char *delim);
-char *remove_space_padding(char *word);
-int _setenv(const char *name, const char *value, int overwrite);
-void _setenv_call(char *args);
-int search_env(const char *key);
-void free_dbptr(char **ptr);
-int _strlen(char *str);
-/* Shell built in  */
-void (*handle_built_in(char *args))(char *);
-void print_env(char *args);
-void my_exit(char *args);
-void change_dir(char *args);
+/**
+ * struct  built_in - contain bultins to handle and function to excute
+ * @command:pointer to char
+ * @func:fun to excute when bultin true
+ */
+struct  built_in
+{
+	char *command;
+	int (*func)(char **line, int errnum);
+};
+typedef struct built_in built_t;
+
+void free_env(char **env);
+void *_realloc(void *ptr, unsigned int prev_size, unsigned int curr_size);
+void _free(char **cmd_list, char *cmd);
+
+int check_cmd(char **cmd);
+char *_getenv(char *name);
+char **_token(char *cmd);
+int handle_built_in(char **cmd, int status);
+int execute(char **cmd, char *input, int errnum, char **argv);
+void my_exit(char **cmd, char *input, char *shell_name, int errnum);
+	
+int print_env(char **cmd, int errnum);
+int change_dir(char **cmd, int errnum);
+int bltn_lookup(char **cmd);
+
+void my_perror(char *input, int errnum, char *shell_name);
+void custm_perror(char *prog_name, int errnum, char **cmd);
+
+char *_itoa(unsigned int num);
+
 #endif

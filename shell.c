@@ -1,50 +1,57 @@
 #include "shell.h"
-#include <signal.h>
 /**
- * read_handler - handles read output
- * @read: value of read system call
- * @line: line read from stdin
- * @argv: name of the program
+ * _getline - function that reads input from file descripter
+ * Return: pointer to a string input
  */
-void read_handler(ssize_t read, char *line, char *argv[])
+char *_getline()
 {
-        char *delim = "\n ";
-        char **cmd;
-	void (*function)(char *) = NULL;
-	int i = 0;
+	char *buffer = NULL;
+	int i = 0, buf_size = 1024;
+	ssize_t bytes_read;
+	char char_in = 0;
 
-	if (read == -1)
+	buffer = malloc(buf_size);
+	if (buffer == NULL)
 	{
-		perror("_getline");
-		exit(1);
+		free(buffer);
+		return (NULL);
 	}
-	if (read == 0)
-		exit(0);
-	cmd = token(line, delim);
-	if (cmd == NULL)
-		return;
-	while (cmd[i] != NULL)
+
+	while (char_in != EOF && char_in != '\n')
 	{
-		function = handle_built_in(cmd[i]);
-		if (function == NULL)
-			execute(cmd[i], argv[0]);
-		else
-			function(cmd[i]);
-		i++;
+		bytes_read = read(STDIN_FILENO, &char_in, 1);
+		if (bytes_read == 0)
+		{
+			free(buffer);
+			exit(EXIT_SUCCESS);
+		}
+		buffer[i] = char_in;
+		if (buffer[0] == '\n')
+		{
+			free(buffer);
+			return (NULL);
+		}
+		if (i >= buf_size)
+		{
+			buffer = _realloc(buffer, buf_size, (buf_size + 1));
+			if (buffer == NULL)
+			{
+				return (NULL);
+			}
+		}
+	i++;
 	}
-	free_dbptr(cmd);
+	buffer[i] = '\0';
+	return (buffer);
 }
-
 /**
  * signal_handle - checks for signal
- * @signal: value of the signal sent
+ * @signal:Captured Signal
  */
 void signal_handle(int signal)
 {
 	if (signal == SIGINT)
-	{
 		write(STDOUT_FILENO, "\n$ ", 3);
-	}
 }
 
 /**
@@ -53,29 +60,35 @@ void signal_handle(int signal)
  * @argv: arguments
  * Return: Always 0 Successg
  */
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-	size_t len = 0;
-	ssize_t read;
-	char *line = NULL, *str = NULL;
+	char *inpt_read, **cmd;
+	int errnum = 0, func_status = 0;
 
-	if (argc > 1)
-	{
-		str = stringfy(argv, argc);
-		execute(str, argv[0]);
-		free(str);
-	}
-
-	signal(SIGINT, signal_handle);
-
+	if (argc > 0)
+	  /**	execute(argv[1], argv);*/
+		signal(SIGINT, signal_handle);
 	while (1)
 	{
+		errnum++;
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "$ ", 2);
-		read = _getline(&line, &len, stdin);
-		read_handler(read, line, argv);
-		free(line);
+		inpt_read = _getline();
+		if (inpt_read[0] == '\0')
+			continue;
+
+		cmd = _token(inpt_read);
+		if (strcmp(*cmd, "exit") == 0)
+			my_exit(cmd, inpt_read, argv[0], errnum);
+		else if (bltn_lookup(cmd) == 0)
+		{
+			func_status = handle_built_in(cmd, func_status);
+			_free(cmd, inpt_read);
+			continue;
+		}
+		else
+		      func_status = execute(cmd, inpt_read, errnum, argv);
+		_free(cmd, inpt_read);
 	}
 	return (0);
 }
-

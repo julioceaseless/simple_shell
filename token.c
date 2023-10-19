@@ -1,49 +1,32 @@
 #include "shell.h"
+
 /**
- * token - splits a string of commands into entries
- * @command: string of command + arguments
- * @delimeter: separater
- * Return: an array of strings
+ * _token - parses string using delimiter and stores it in an array
+ * @command: command string to parse
+ * Return: Array of pointers to strings
  */
-char **token(char *command, char *delimiter)
+char **_token(char *command)
 {
-    char **args = NULL;
-    char *token = NULL;
-    int i = 0;
+	char **args;
+	char *token;
+	int i, buffsize = 1024;
 
-    if (command == NULL || delimiter == NULL)
-    {
-        return NULL;
-    }
-    args = (char **)malloc(sizeof(char *));
-    if (args == NULL)
-    {
-        perror("malloc");
-        return NULL;
-    }
+	if (command == NULL)
+		return (NULL);
+	args = malloc(sizeof(char *) * buffsize);
+	if (!args)
+	{
+		perror("hsh");
+		return (NULL);
+	}
 
-    token = strtok(command, delimiter);
-    while (token != NULL)
-    {
-        char **tmp = (char **)realloc(args, (i + 2) * sizeof(char *)); 
-        if (tmp == NULL)
-        {
-            perror("realloc");
-            free_dbptr(args);
-            return NULL;
-        }
-        args = tmp;
-        args[i] = malloc(strlen(token) + 1);
-        if (args[i] == NULL)
-        {
-            perror("malloc");
-            free_dbptr(args); 
-            return NULL;
-        }
-        strcpy(args[i], token);
-        args[i + 1] = NULL; 
-        i++;
-        token = strtok(NULL, delimiter);
-    }
-    return args;
+	token = strtok(command, "\n ");
+	for (i = 0; token; i++)
+	{
+		args[i] = token;
+		token = strtok(NULL, "\n ");
+	}
+	args[i] = NULL;
+
+	return (args);
 }

@@ -1,27 +1,36 @@
 #include "shell.h"
 /**
- * my_exit - exits shell
- * @args: argument passed
- *
+ * my_exit - custom exit function to exit shell
+ * @cmd_list: command list
+ * @inpt_read: input from the user
+ * @shell_name: name of the program file
+ * @errnum: error count
  * Return: nothing!
  */
-void my_exit(char *args)
+void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 {
-	int stat;
-	char delim[] = " ";
-	char **cmd = NULL;
+	int exit_status;
+	int i = 0;
 
-	cmd = token(args, delim);
-
-	if (cmd[1] == NULL)
+	if (cmd_list[1] == NULL)
 	{
-		_exit(0);
+		free(inpt_read);
+		free(cmd_list);
+		exit(EXIT_SUCCESS);
 	}
-	stat = atoi(cmd[1]);
-
-	fflush(NULL);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
-	_exit(stat);
+	while (cmd_list[1][i] != '\0')
+	{
+		if (isalpha(cmd_list[1][i++]) != 0)
+		{
+			custm_perror(shell_name, errnum, cmd_list);
+			break;
+		}
+		else
+		{
+			exit_status = atoi(cmd_list[1]);
+			free(inpt_read);
+			free(cmd_list);
+			_exit(exit_status & 0xFF);
+		}
+	}
 }

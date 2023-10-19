@@ -1,22 +1,19 @@
 #include "shell.h"
 /**
- * print_env - prints environment variables
- * @args: argument passed
- *
- * Return: nothing
+ * print_env - Display Enviroment Variable
+ * @cmd: command line args
+ * @errnum: errnum count
+ * Return: Always 0
  */
-void print_env(char *args)
+int print_env(__attribute__((unused)) char **cmd,
+		__attribute__((unused)) int errnum)
 {
-	char **env = environ;
+	size_t i;
 
-	(void)args;
-
-	if (env == NULL)
-		exit(9);
-	while (*env != NULL)
+	for (i = 0; environ[i] != NULL; i++)
 	{
-		write(STDOUT_FILENO, *env, strlen(*env));
+		write(1, environ[i], strlen(environ[i]));
 		write(STDOUT_FILENO, "\n", 1);
-		env++;
 	}
+	return (0);
 }
