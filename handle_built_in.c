@@ -1,38 +1,27 @@
 #include "shell.h"
 /**
- * handle_built_in - matches command with its required function
- * @args: command
- * Return: nothing!
+ * handle_built_in - handle built_in commands eg cd, env
+ * @cmd: command list
+ * @status: state of the last function
+ * Return: -1 Fail 0 Succes (Return :Excute Builtin)
  */
-void (*handle_built_in(char *args))(char *)
+
+int handle_built_in(char **cmd, int status)
 {
-	int i = 0;
-	char  *delim = " ";
-	char **cmd;
 	built_t blt_array[] = {
-		{"exit", my_exit},
 		{"env", print_env},
 		{"cd", change_dir},
 		{NULL, NULL}
 	};
+	int i = 0;
 
-	if (args == NULL)
-		return (NULL);
-	cmd = token(args, delim);
-	if (cmd == NULL)
+	while (blt_array[i].command)
 	{
-		perror("token");
-		return (NULL);
+		if (strcmp(cmd[0], blt_array[i].command) == 0)
+			return (blt_array[i].func(cmd, status));
+		i++;
 	}
-
-	for (; blt_array[i].command != NULL; i++)
-	{
-		if (strcmp(*cmd, blt_array[i].command) == 0)
-		{
-		      free_dbptr(cmd);
-		      return (blt_array[i].func);
-		}
-	}
-	free_dbptr(cmd);
-	return (NULL);
+	return (-1);
 }
+
+

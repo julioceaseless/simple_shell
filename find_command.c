@@ -1,31 +1,55 @@
 #include "shell.h"
-#include <sys/stat.h>
+/**
+ * append_path - Build Command
+ * @token: Excutable Command
+ * @value: Dirctory Conatining Command
+ *
+ * Return: Parsed Full Path Of Command Or NULL Case Failed
+ */
+char *append_path(char *token, char *value)
+{
+	char *cmd;
+	size_t len;
+
+	len = strlen(value) + strlen(token) + 2;
+	cmd = malloc(sizeof(char) * len);
+	if (cmd == NULL)
+	{
+		return (NULL);
+	}
+
+	memset(cmd, 0, len);
+
+	cmd = strcat(cmd, value);
+	cmd = strcat(cmd, "/");
+	cmd = strcat(cmd, token);
+
+	return (cmd);
+}
 
 /**
- * find_command - finds command in paths
- * @paths: array of full command paths to search in
- *
- * Return: path to where command was found or NULL if not found
+ * check_cmd -  searches command in path
+ * @cmd: Parsed Input
+ * Return: 1  Failure  0  Success.
  */
-char *find_command(char **paths)
+int check_cmd(char **cmd)
 {
-	struct stat st;
-	int i = 0, found;
+	char *path, *value, *cmd_;
+	struct stat buf;
 
-	if (paths == NULL)
-		return (NULL);
-
-	if (paths != NULL)
+	path = getenv("PATH");
+	value = strtok(path, ":");
+	while (value != NULL)
 	{
-		while (paths[i] != NULL)
+		cmd_ = append_path(*cmd, value);
+		if (stat(cmd_, &buf) == 0)
 		{
-			found = stat(paths[i], &st);
-			if (found == 0)
-			{
-				return (paths[i]);
-			}
-			i++;
+			*cmd = strdup(cmd_);
+			free(cmd_);
+			return (0);
 		}
+		free(cmd_);
+		value = strtok(NULL, ":");
 	}
-	return (NULL);
+	return (1);
 }

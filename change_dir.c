@@ -1,74 +1,34 @@
 #include "shell.h"
 /**
- * all_spaces - checks if a string contains only spaces
- * @str: string to be checked
- *
- * Return: 1 if true 0 if false
- *
+ * change_dir - Change Dirctorie
+ * @cmd: Parsed Command
+ * @errnum: Statue Last Command Excuted
+ * Return: 0 Succes 1 Failed (For Old Pwd Always 0 Case No Old PWD)
  */
-int all_spaces(char *str)
+int change_dir(char **cmd, __attribute__((unused))int errnum)
 {
-	while (*str)
-	{
-		if (!isspace((unsigned char)*str))
-		{
-			return (0);
-		}
-		str++;
-	}
-	return (1);
-}
+	int value = -1;
+	char cwd[PATH_MAX];
 
-/**
- * change_dir - changes directory
- * @args: arguments with directory to move to
- *
- * Return: void
- *
- */
-void change_dir(char *args)
-{
-	char *delim = " ", **cmd = NULL,  *curr = _getenv("PWD=");
-	char *home = _getenv("HOME="),  *old = _getenv("OLDPWD=");
-	int ch_dir;
-
-	cmd = token(args, delim);
-	if (cmd != NULL && cmd[1] != NULL && !all_spaces(cmd[1]))
+	if (cmd[1] == NULL)
+		value = chdir(getenv("HOME"));
+	else if (strcmp(cmd[1], "-") == 0)
 	{
-		if (*cmd[1] == '-' && (strlen(cmd[1]) == 1))
-		{
-			ch_dir = chdir(old);
-			if (ch_dir != 0)
-			{
-				free_dbptr(cmd);
-				perror("chdir");
-				return;
-			}
-			setenv("OLDPWD", curr, 1);
-			setenv("PWD", old, 1);
-			printf("%s\n", curr);
-		}
-		else
-		{
-			ch_dir = chdir(cmd[1]);
-			if (ch_dir != 0)
-			{
-				free_dbptr(cmd);
-				perror("cd");
-				return;
-			}
-		}
+		value = chdir(getenv("OLDPWD"));
 	}
 	else
+		value = chdir(cmd[1]);
+
+	if (value == -1)
 	{
-		if (home != NULL)
-			chdir(home);
-		else
-		{
-			free_dbptr(cmd);
-			perror("chdir");
-			return;
-		}
+		perror("hsh");
+		return (-1);
 	}
-	free_dbptr(cmd);
+	else if (value != -1)
+	{
+		getcwd(cwd, sizeof(cwd));
+		setenv("OLDPWD", getenv("PWD"), 1);
+		setenv("PWD", cwd, 1);
+	}
+	return (0);
 }

@@ -1,54 +1,45 @@
 #include "shell.h"
 /**
- * execute - function to exexcute command from env
- * @args: command passed with arguments
- * @argv: name of program
- * Return: Void
+ * execute - Excute Simple Shell Command (Fork,Wait,Excute)
+ * @cmd:Parsed Command
+ * @input: User Input
+ * @errnum:Shell Excution Time Case of Command Not Found
+ * @argv:Program Name
+ * Return: 1 Case Command Null -1 Wrong Command 0 Command Excuted
  */
-void execute(char *args, char *argv)
+int execute(char **cmd, char *input, int errnum, char **argv)
 {
+	int status;
 	pid_t child_pid;
-	char *delim = " \t\n", *run = NULL, **env = environ;
-	char *path = _getenv("PATH="), **cmd = token(args, delim);
-	char **fullpaths = append_path(path, *cmd);
-	int status, check = check_path(args);
 
-	if (check == 0)
-		run = find_command(fullpaths);
-	else if (check == 1)
-		run = find_command(cmd);
+	if (*cmd == NULL)
+	{
+		return (-1);
+	}
 
-	if (run == NULL)
+	child_pid = fork();
+	if (child_pid == -1)
 	{
-		perror(*cmd);
-		return;
+		perror("Error");
+		return (-1);
 	}
-	else
+
+	if (child_pid == 0)
 	{
-		child_pid = fork();
-		if (child_pid == -1)
+		if (strncmp(*cmd, "./", 2) != 0 && strncmp(*cmd, "/", 1) != 0)
 		{
-			perror("fork");
-			exit(1);
+			check_cmd(cmd);
 		}
-		if (child_pid == 0)
+
+		if (execve(*cmd, cmd, environ) == -1)
 		{
-			if (cmd == NULL || env == NULL)
-				return;
-			if (execve(run, cmd, env) == -1)
-			{
-				free_dbptr(cmd);
-				perror(argv);
-				exit(1);
-			}
-			else
-			{
-				free_dbptr(cmd);
-				exit(0);
-			}
+			my_perror(cmd[0], errnum, argv[0]);
+			free(input);
+			free(cmd);
+			exit(EXIT_FAILURE);
 		}
-		else
-			waitpid(child_pid, &status, 0);
+		return (EXIT_SUCCESS);
 	}
-	free(path);
+	wait(&status);
+	return (0);
 }
