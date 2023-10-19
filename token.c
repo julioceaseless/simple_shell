@@ -21,11 +21,11 @@ char **_token(char *command, char *delimiter)
 		return (NULL);
 	}
 
-	token = strtok(command, delimiter);
+	token = _strtok(command, delimiter);
 	for (i = 0; token; i++)
 	{
 		args[i] = token;
-		token = strtok(NULL, delimiter);
+		token = _strtok(NULL, delimiter);
 	}
 	args[i] = NULL;
 

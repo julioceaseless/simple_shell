@@ -43,5 +43,6 @@ int bltn_lookup(char **cmd);
 void my_perror(char *input, int errnum, char *shell_name);
 void custm_perror(char *prog_name, int errnum, char **cmd);
 char *_itoa(unsigned int num);
+char *_strtok(char *str, const char *delim);
 
 #endif
