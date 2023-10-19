@@ -3,9 +3,10 @@
 /**
  * _token - parses string using delimiter and stores it in an array
  * @command: command string to parse
+ * @delimiter: separator
  * Return: Array of pointers to strings
  */
-char **_token(char *command)
+char **_token(char *command, char *delimiter)
 {
 	char **args;
 	char *token;
@@ -20,11 +21,11 @@ char **_token(char *command)
 		return (NULL);
 	}
 
-	token = strtok(command, "\n ");
+	token = strtok(command, delimiter);
 	for (i = 0; token; i++)
 	{
 		args[i] = token;
-		token = strtok(NULL, "\n ");
+		token = strtok(NULL, delimiter);
 	}
 	args[i] = NULL;
 

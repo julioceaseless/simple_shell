@@ -33,7 +33,7 @@ void *_realloc(void *ptr, unsigned int prev_size, unsigned int curr_size);
 void _free(char **cmd_list, char *cmd);
 char *append_path(char *command, char *path);
 int check_cmd(char **cmd);
-char **_token(char *cmd);
+char **_token(char *cmd, char *delimiter);
 int handle_built_in(char **cmd, int status);
 int execute(char **cmd, char *input, int errnum, char **argv);
 void my_exit(char **cmd, char *input, char *shell_name, int errnum);
