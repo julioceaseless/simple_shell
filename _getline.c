@@ -1,47 +1,46 @@
 #include "shell.h"
 /**
  * _getline - function that reads input from file descripter
- * @lineptr: pointer to line read
- * @n: size of space allocated to line
- * @stream: file descriptor to read from
- *
- * Return: number of characters read
+ * Return: pointer to a string input
  */
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
+char *_getline()
 {
-	char *buf = NULL;
+	char *buffer = NULL;
+	int i = 0, buf_size = 1024;
 	ssize_t bytes_read;
-	size_t total_bytes = 0;
-	int count = 1, fd = fileno(stream);
+	char char_in = 0;
 
-	if (lineptr == NULL || n == NULL)
-		return (-1);
-	buf = malloc(BUF_SIZE);
-	if (buf == NULL)
-		return (-1);
-	while ((bytes_read = read(fd, buf, BUF_SIZE)))
+	buffer = malloc(buf_size);
+	if (buffer == NULL)
 	{
-		total_bytes += bytes_read;
-		if (buf[total_bytes - 1] == '\n')
-			break;
-		if (total_bytes >= BUF_SIZE)
+		free(buffer);
+		return (NULL);
+	}
+
+	while (char_in != EOF && char_in != '\n')
+	{
+		bytes_read = read(STDIN_FILENO, &char_in, 1);
+		if (bytes_read == 0)
 		{
-			count++;
-			buf = realloc(buf, (BUF_SIZE * count));
-			if (buf == NULL)
+			free(buffer);
+			exit(EXIT_SUCCESS);
+		}
+		buffer[i] = char_in;
+		if (buffer[0] == '\n')
+		{
+			free(buffer);
+			return (NULL);
+		}
+		if (i >= buf_size)
+		{
+			buffer = _realloc(buffer, buf_size, (buf_size + 1));
+			if (buffer == NULL)
 			{
-				free(buf);
-				perror("realloc");
-				return (-1);
+				return (NULL);
 			}
 		}
+	i++;
 	}
-	if (bytes_read == -1)
-	{
-		free(buf);
-		return (-1);
-        }
-	*lineptr = buf;
-	*n = 120 * count;
-	return (total_bytes);
+	buffer[i] = '\0';
+	return (buffer);
 }

@@ -27,11 +27,11 @@ struct  built_in
 	int (*func)(char **line, int errnum);
 };
 typedef struct built_in built_t;
-
+char *_getline();
 void free_env(char **env);
 void *_realloc(void *ptr, unsigned int prev_size, unsigned int curr_size);
 void _free(char **cmd_list, char *cmd);
-
+char *append_path(char *command, char *path);
 int check_cmd(char **cmd);
 char *_getenv(char *name);
 char **_token(char *cmd);
