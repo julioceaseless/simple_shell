@@ -33,13 +33,13 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 			{
 				free(inpt_read);
 				free(cmd_list);
-				_exit(2);
+				exit(2);
 			}
 			else
 			{
 				free(inpt_read);
 				free(cmd_list);
-				_exit(exit_status & 0xFF);
+				exit(exit_status & 0xFF);
 			}
 		}
 		i++;
