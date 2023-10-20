@@ -16,7 +16,7 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 	{
 		free(inpt_read);
 		free(cmd_list);
-		exit(EXIT_SUCCESS);
+		exit(errnum);
 	}
 	while (cmd_list[1][i] != '\0')
 	{
@@ -28,6 +28,7 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 		else
 		{
 			exit_status = atoi(cmd_list[1]);
+			printf("%d", exit_status);
 			free(inpt_read);
 			free(cmd_list);
 			_exit(exit_status & 0xFF);
