@@ -11,6 +11,7 @@ int bltn_lookup(char **cmd)
 		{"cd", NULL},
 		{"history", NULL},
 		{"echo", NULL},
+		{"env", NULL},
 		{NULL, NULL}
 	};
 	int i = 0;
