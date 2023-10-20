@@ -1,19 +1,4 @@
 #include "shell.h"
-#include "shell.h"
-/**
- * free_dbptr - frees double pointer
- * @ptr: double pointer
- */
-void free_dbptr(char **ptr)
-{
-	int i = 0;
-
-	for (; ptr[i] != NULL; i++)
-	{
-		free(ptr[i]);
-	}
-	free(ptr);
-}
 
 /**
  * _token - parses string using delimiter and stores it in an array
@@ -25,7 +10,7 @@ char **_token(char *command, char *delimiter)
 {
 	char **args;
 	char *token;
-	int i = 0, buffsize = 10;
+	int i, buffsize = 1024;
 
 	if (command == NULL)
 		return (NULL);
@@ -37,21 +22,9 @@ char **_token(char *command, char *delimiter)
 	}
 
 	token = _strtok(command, delimiter);
-	while (token)
+	for (i = 0; token; i++)
 	{
 		args[i] = token;
-		i++;
-		if (i >= buffsize - 1)
-		{
-			buffsize = buffsize * 2;
-			args = realloc(args, sizeof(char *) * buffsize);
-			if (args == NULL)
-			{
-				perror("hsh");
-				free_dbptr(args);
-				return (NULL);
-			}
-		}
 		token = _strtok(NULL, delimiter);
 	}
 	args[i] = NULL;

@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 		if (inpt_read[0] == '\0')
 			continue;
 
-		cmd = _token(inpt_read, " \n\r\t");
+		cmd = _token(inpt_read, "\n ");
 		if (strcmp(*cmd, "exit") == 0)
 			my_exit(cmd, inpt_read, argv[0], errnum);
 		else if (bltn_lookup(cmd) == 0)
