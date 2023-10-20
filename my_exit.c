@@ -18,6 +18,7 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 		free(cmd_list);
 		exit(EXIT_SUCCESS);
 	}
+	    
 	while (cmd_list[1][i] != '\0')
 	{
 		if (isalpha(cmd_list[1][i++]) != 0)
@@ -32,5 +33,6 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 			free(cmd_list);
 			_exit(exit_status & 0xFF);
 		}
+		i++;
 	}
 }
