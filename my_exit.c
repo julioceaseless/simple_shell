@@ -18,7 +18,12 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 		free(cmd_list);
 		exit(EXIT_SUCCESS);
 	}
-
+	if (errnum == ENOENT)
+	{
+		free(inpt_read);
+		free(cmd_list);
+		_exit(2);
+	}
 	while (cmd_list[1][i] != '\0')
 	{
 		if (isalpha(cmd_list[1][i]) != 0)
@@ -29,7 +34,7 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 		else
 		{
 			exit_status = atoi(cmd_list[1]);
-			if (exit_status < 0 || errnum == ENOENT)
+			if (exit_status < 0)
 			{
 				free(inpt_read);
 				free(cmd_list);
