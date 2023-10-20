@@ -38,7 +38,7 @@ void my_exit(char **cmd_list, char *inpt_read, char *shell_name, int errnum)
 			{
 				free(inpt_read);
 				free(cmd_list);
-				exit(2);
+				exit(errnum);
 			}
 			else
 			{
